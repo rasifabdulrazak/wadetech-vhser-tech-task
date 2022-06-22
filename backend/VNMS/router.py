@@ -3,4 +3,5 @@ from VHSER_MODULE.views import *
 
 
 router = routers.DefaultRouter()
-router.register('services',VhserOrganisationView,basename='service_organisation')
+router.register('organisation',VhserOrganisationView,basename='service_organisation')
+router.register('services',VhserServiceView,basename='service_type')

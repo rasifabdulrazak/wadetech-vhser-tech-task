@@ -10,7 +10,7 @@ const ServiceComponent = () => {
 
     const fetchData = async ()=>{
         try {
-            const {data} = await axios.get(`http://localhost:8000/vehicle/services/`)
+            const {data} = await axios.get(`http://localhost:8000/vehicle/organisation/`)
             console.log(data)
             setServices(data)
 
@@ -24,18 +24,17 @@ const ServiceComponent = () => {
 
   return (
     <Container>
-      <Row className="mt-5">
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Service Organisation</Form.Label>
-          <Form.Select name="status" aria-label="Default select example">
-            {services.length>0 && services.map((value,index)=> <option value={value.org_name}>{value.org_name}</option>)}
+      { services.length>0 && services.map((value,index)=>  <Row 
+      onClick={()=>navigate(`/service_details/${value.id}`)}
+      className="mt-5">
+       
+   {value.org_name}
 
-          </Form.Select>
-        </Form.Group>
-        <Row >
-            <Button onClick={()=>navigate('/service_details')}>Submit</Button>
-        </Row>
-      </Row>
+
+
+    
+      
+      </Row>)}
 
     </Container>
   );

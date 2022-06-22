@@ -2,24 +2,43 @@ import React, { useState,useEffect } from "react";
 import { Button, Container, Row, Table, Form } from "react-bootstrap";
 import { PlusCircle, Trash } from "react-bootstrap-icons";
 import axios from "axios";
+import VehicleComponent from "../VehicleComponent/VehicleComponent";
 
 const TableComponent = (props) => {
   const [services,setServices] = useState()
+  const [total,setTotal] = useState()
   const fetchData = async ()=>{
     try {
         const {data} = await axios.get(`http://localhost:8000/vehicle/services/`)
         console.log(data)
+        let sum=0
+        for(let i=0;i<data.length;i++){
+          sum+=data[i]['service_amount']
+
+        }
+        setTotal(sum)
+        console.log(sum)
         setServices(data)
 
     } catch (error) {
         console.log(error)
     }
 }
+const deleteService = async (e)=>{
+  try {
+    await axios.delete(`http://localhost:8000/vehicle/services/${e}`)
+    fetchData()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
 useEffect(()=>{
     fetchData()
 },[])
 
-  console.log(props.services);
+
   return (
     <Container>
       <Row className="mt-5 mb-5">
@@ -39,27 +58,20 @@ useEffect(()=>{
               </tr>
             </thead>
             <tbody>
-              <tr>
+             {services && services.map((value)=> <tr>
                 <td>
-                  <Form.Group controlId="formBasicEmail">
-                    <Form.Select
-                      name="status"
-                      aria-label="Default select example"
-                    >
-                      {services && services.map((value)=><option value={value.org_name}>{value.org_name}</option>)}
-                    </Form.Select>
-                  </Form.Group>
+                  {value.service_type}
                 </td>
-                <td className="text-end">Otto</td>
+                <td className="text-end">{value.service_amount}</td>
                 <td className="text-center">
-                  <Trash width={20} height={20} />
-                  <PlusCircle width={20} height={20} />
+                  <Trash onClick={()=>deleteService(value.id)} width={20} height={20} />
+                 
                 </td>
-              </tr>
+              </tr>)}
             </tbody>
           </Table>
           <div className="text-end m-2">
-            <h3>Total Amount : </h3>
+            <h3>Total Amount :{total && total} </h3>
           </div>
           <div className="text-end m-2">
             <Button
@@ -95,6 +107,8 @@ useEffect(()=>{
           </div>
         </div>
       </Row>
+
+
     </Container>
   );
 };
