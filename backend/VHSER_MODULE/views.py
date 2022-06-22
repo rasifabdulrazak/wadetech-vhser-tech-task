@@ -10,6 +10,7 @@ from rest_framework.decorators import api_view
 count = 1
 
 
+# Class based view function for CRUD of organisation
 class VhserOrganisationView(viewsets.ModelViewSet):
     queryset = VHSER_ORGANISATION.objects.all()
     serializer_class = VhserOrganisationSerializer
@@ -23,6 +24,8 @@ class VhserModuleView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# Class based view function for CRUD of services
+
 
 class VhserServiceView(viewsets.ModelViewSet):
     queryset = VHSER_SERVICE.objects.all()
@@ -31,6 +34,9 @@ class VhserServiceView(viewsets.ModelViewSet):
 
 @api_view(['POST'])
 def submit(request):
+    '''
+     view funtion for submiting the datas from fronted for reciept
+    '''
     global count
     print(request.data)
     vehicle = VHSER_VEHICLE.objects.create(
